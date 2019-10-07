@@ -116,7 +116,7 @@ def get_tags(row: Tag) -> List[Tag]:
 def format_tag_val(tag: Tag) -> Union[str, float]:
     raw_val = tag.get_text().strip()
 
-    pat = r"^(?P<sign>[-+])?(?P<number>[\d,]+\.?\d*)(?P<suffix>M|B|%)?$"
+    pat = r"^(?P<sign>[-+])?(?P<number>[\d,]+\.?\d*)(?P<suffix>k|M|B|%)?$"
     match = re.match(pat, raw_val)
     if match:
         number = float(match["number"].replace(',', ''))
@@ -138,6 +138,8 @@ def format_tag_val(tag: Tag) -> Union[str, float]:
 def format_number(number: float, sign: Optional[str], suffix: Optional[str]) -> float:
     if sign == "-":
         number = number * -1
+    if suffix == 'k':
+        number = number * 10 ** 3
     if suffix == "M":
         number = number * 10 ** 6
     if suffix == "B":
